@@ -1,0 +1,25 @@
+{
+  "schemaVersion": 1,
+  "id": "hidenametag",
+  "version": "${version}",
+  "name": "HideNameTag",
+  "description": "",
+  "authors": [],
+  "contact": {},
+  "license": "MIT",
+  "icon": "assets/hidenametag/icon.png",
+  "environment": "server",
+  "entrypoints": {
+    "main": [
+      "org.lend.hidenametag.Hidenametag"
+    ]
+  },
+  "mixins": [
+    "hidenametag.mixins.json"
+  ],
+  "depends": {
+    "fabricloader": ">=${loader_version}",
+    "fabric": "*",
+    "minecraft": "${minecraft_version}"
+  }
+}
