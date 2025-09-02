@@ -4,6 +4,7 @@
   "package": "org.lend.hidenametag.mixin",
   "compatibilityLevel": "JAVA_21",
   "mixins": [
+    "PlayerEntityMixin"
   ],
   "client": [
   ],
