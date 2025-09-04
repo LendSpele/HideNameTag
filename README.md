@@ -1,3 +1,5 @@
+<img width="1842" height="1057" alt="2025-09-03_22 09 09" src="https://github.com/user-attachments/assets/b218a4da-065b-4781-a528-d828faf46422" />
+
 ## English:
 Hides player nicknames using team and shows them above the hotbar when right-clicking.
 
@@ -15,3 +17,4 @@ Mod type: **Server-side only**
 ```/hidenametag NameColor FFFFFF``` - чтобы изменить цвет имени(LendSpele) на FFFFFF(hex)
 
 Тип мода: **Сервер-сайд**
+
