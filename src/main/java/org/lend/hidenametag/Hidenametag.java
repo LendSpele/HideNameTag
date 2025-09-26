@@ -45,6 +45,7 @@ public class Hidenametag implements ModInitializer {
         CommandRegistrationCallback.EVENT.register((dispatcher, registryAccess, environment) -> {
             dispatcher.register(literal("hidenametag")
                     .then(literal("NameColor")
+                            .requires(src -> src.hasPermissionLevel(2))
                             .then(argument("hex", StringArgumentType.word())
                                     .executes(ctx -> {
                                         String hex = StringArgumentType.getString(ctx, "hex");
@@ -53,6 +54,7 @@ public class Hidenametag implements ModInitializer {
                                         return 1;
                                     })))
                     .then(literal("TextColor")
+                            .requires(src -> src.hasPermissionLevel(2))
                             .then(argument("hex", StringArgumentType.word())
                                     .executes(ctx -> {
                                         String hex = StringArgumentType.getString(ctx, "hex");
