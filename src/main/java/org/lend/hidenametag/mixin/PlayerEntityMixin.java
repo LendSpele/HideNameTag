@@ -16,7 +16,7 @@ public abstract class PlayerEntityMixin {
     private void onPlayerJoinServer(CallbackInfo ci) {
         ServerPlayerEntity player = (ServerPlayerEntity) (Object) this;
 
-        if (!(player.getWorld() instanceof ServerWorld world)) return;
+        if (!(player.getEntityWorld() instanceof ServerWorld world)) return;
 
         Team playersTeam = world.getScoreboard().getTeam("HideNameTag");
         if (playersTeam == null) {
