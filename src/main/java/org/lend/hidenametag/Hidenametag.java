@@ -26,9 +26,9 @@ public class Hidenametag implements ModInitializer {
         HNTManager.loadConfig();
 
         UseEntityCallback.EVENT.register((player, world, hand, entity, hitResult) -> {
-            if (!world.isClient && entity instanceof ServerPlayerEntity target) {
+            if (!world.isClient() && entity instanceof ServerPlayerEntity target) {
                 if (!target.hasStatusEffect(StatusEffects.INVISIBILITY)) {
-                    String nick = target.getGameProfile().getName();
+                    String nick = target.getGameProfile().name();
 
                     Text nameTag = Text.literal("-✧ ")
                             .styled(s -> s.withColor(HNTManager.getBracketColor()))
