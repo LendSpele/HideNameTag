@@ -2,7 +2,7 @@ package org.lend.hidenametag;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import net.minecraft.text.TextColor;
+import net.minecraft.network.chat.TextColor;
 
 import java.io.File;
 import java.io.FileReader;
@@ -28,7 +28,10 @@ public class HNTManager {
     }
 
     public static void saveConfig() {
-        CONFIG_FILE.getParentFile().mkdirs();
+        File parent = CONFIG_FILE.getParentFile();
+        if (parent != null) {
+            parent.mkdirs();
+        }
         try (FileWriter writer = new FileWriter(CONFIG_FILE)) {
             GSON.toJson(config, writer);
         } catch (IOException e) {
@@ -64,7 +67,7 @@ public class HNTManager {
 
     private static TextColor parseColor(String hex, int fallback) {
         try {
-            return TextColor.parse(hex).result().orElse(TextColor.fromRgb(fallback));
+            return TextColor.parseColor(hex).result().orElse(TextColor.fromRgb(fallback));
         } catch (Exception e) {
             return TextColor.fromRgb(fallback);
         }

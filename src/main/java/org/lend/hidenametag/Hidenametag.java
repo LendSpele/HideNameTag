@@ -4,15 +4,13 @@ import com.mojang.brigadier.arguments.StringArgumentType;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback;
 import net.fabricmc.fabric.api.event.player.UseEntityCallback;
-import net.minecraft.entity.effect.StatusEffects;
-import net.minecraft.server.network.ServerPlayerEntity;
-import net.minecraft.text.Text;
-import net.minecraft.util.ActionResult;
+import net.minecraft.commands.Commands;
+import net.minecraft.network.chat.Component;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.InteractionResult;
+import net.minecraft.world.effect.MobEffects;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import static net.minecraft.server.command.CommandManager.argument;
-import static net.minecraft.server.command.CommandManager.literal;
 
 public class Hidenametag implements ModInitializer {
 
@@ -26,40 +24,40 @@ public class Hidenametag implements ModInitializer {
         HNTManager.loadConfig();
 
         UseEntityCallback.EVENT.register((player, world, hand, entity, hitResult) -> {
-            if (!world.isClient() && entity instanceof ServerPlayerEntity target) {
-                if (!target.hasStatusEffect(StatusEffects.INVISIBILITY)) {
+            if (!world.isClientSide() && entity instanceof ServerPlayer target) {
+                if (!target.hasEffect(MobEffects.INVISIBILITY)) {
                     String nick = target.getGameProfile().name();
 
-                    Text nameTag = Text.literal("-✧ ")
-                            .styled(s -> s.withColor(HNTManager.getBracketColor()))
-                            .append(Text.literal(nick).styled(s -> s.withColor(HNTManager.getNameColor())))
-                            .append(Text.literal(" ✧-").styled(s -> s.withColor(HNTManager.getBracketColor())));
+                    Component nameTag = Component.literal("-✧ ")
+                            .withStyle(s -> s.withColor(HNTManager.getBracketColor()))
+                            .append(Component.literal(nick).withStyle(s -> s.withColor(HNTManager.getNameColor())))
+                            .append(Component.literal(" ✧-").withStyle(s -> s.withColor(HNTManager.getBracketColor())));
 
-                    player.sendMessage(nameTag, true);
+                    player.sendOverlayMessage(nameTag);
                 }
-                return ActionResult.SUCCESS;
+                return InteractionResult.SUCCESS;
             }
-            return ActionResult.PASS;
+            return InteractionResult.PASS;
         });
 
         CommandRegistrationCallback.EVENT.register((dispatcher, registryAccess, environment) -> {
-            dispatcher.register(literal("hidenametag")
-                    .then(literal("NameColor")
-                            .requires(src -> src.hasPermissionLevel(2))
-                            .then(argument("hex", StringArgumentType.word())
+            dispatcher.register(Commands.literal("hidenametag")
+                    .then(Commands.literal("NameColor")
+                            .requires(Commands.hasPermission(Commands.LEVEL_GAMEMASTERS))
+                            .then(Commands.argument("hex", StringArgumentType.word())
                                     .executes(ctx -> {
                                         String hex = StringArgumentType.getString(ctx, "hex");
                                         HNTManager.setNameColor(hex);
-                                        ctx.getSource().sendFeedback(() -> Text.literal("The name color has been changed to " + hex), false);
+                                        ctx.getSource().sendSuccess(() -> Component.literal("The name color has been changed to " + hex), false);
                                         return 1;
                                     })))
-                    .then(literal("TextColor")
-                            .requires(src -> src.hasPermissionLevel(2))
-                            .then(argument("hex", StringArgumentType.word())
+                    .then(Commands.literal("TextColor")
+                            .requires(Commands.hasPermission(Commands.LEVEL_GAMEMASTERS))
+                            .then(Commands.argument("hex", StringArgumentType.word())
                                     .executes(ctx -> {
                                         String hex = StringArgumentType.getString(ctx, "hex");
                                         HNTManager.setBracketColor(hex);
-                                        ctx.getSource().sendFeedback(() -> Text.literal("The text color has been changed to " + hex), false);
+                                        ctx.getSource().sendSuccess(() -> Component.literal("The text color has been changed to " + hex), false);
                                         return 1;
                                     })))
             );
